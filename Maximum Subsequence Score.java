@@ -34,3 +34,29 @@ n == nums1.length == nums2.length
 1 <= k <= n
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ class Solution {
+    public long maxScore(int[] nums1, int[] nums2, int k) {
+        int n = nums1.length;
+        Integer[] indices = new Integer[n];
+        for (int i = 0; i < n; i++) indices[i] = i;
+
+        Arrays.sort(indices, (a, b) -> nums2[b] - nums2[a]);
+
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        long sum = 0, result = 0;
+
+        for (int i = 0; i < n; i++) {
+            int idx = indices[i];
+            sum += nums1[idx];
+            minHeap.add(nums1[idx]);
+
+            if (minHeap.size() > k) sum -= minHeap.poll();
+            if (minHeap.size() == k) result = Math.max(result, sum * nums2[idx]);
+        }
+
+        return result;
+    }
+}
+
+
